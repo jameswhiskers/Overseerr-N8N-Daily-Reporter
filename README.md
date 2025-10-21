@@ -84,7 +84,7 @@ Edit the **`settings`** node to tell it how to behave:
 }
 ```
 
-- Mode Mode
+- More Mode
 ```json
 
 {
