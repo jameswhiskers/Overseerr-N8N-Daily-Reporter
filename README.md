@@ -63,21 +63,53 @@ Edit the **`settings`** node to tell it how to behave:
 
 ## 💬 Output Example
 
+-Less mode
 ```json
+
 {
-  "date": "2025-10-22",
-  "pending_count": 2,
-  "approved_count": 8,
-  "available_count": 15,
-  "stalled_count": 3,
-  "stalled_items": [
+  "output": [
     {
-      "title": "Dune: Part Two",
+      "originalTitle": "Looney Tunes Golden Collection, Vol. 1",  
+      "mediaType": "movie",
+      "createdDate": "2025-10-21T03:49:10.000Z",
+      "daysSinceRequested": 0
+    },
+    {
+    "originalTitle": "The Toxic Avenger Unrated",
+    "mediaType": "movie",
+    "createdDate":"2025-10-12T07:42:54.000Z",
+    "daysSinceRequested": 9
+    }
+  ]
+}
+```
+
+- Mode Mode
+```json
+
+{
+  "output": [
+    {
+      "movieId": 38,
+      "tmdbId": 465022,
       "mediaType": "movie",
       "status": "approved",
-      "downloadStatus": 2,
-      "requestedBy": "jamie",
-      "daysSinceRequested": 67
+      "downloadStatus": 3,
+      "requestedBy": "Grimm",
+      "originalTitle": "Looney Tunes Golden Collection, Vol. 1",
+      "createdDate": "2025-10-21T03:49:10.000Z",
+      "daysSinceRequested": 0
+    },
+    {
+      "movieId": 33,
+      "tmdbId": 1428,
+      "mediaType": "tv",
+      "status": "approved",
+      "downloadStatus": 4,
+      "requestedBy": "thatautisticguy",
+      "originalTitle":"MythBusters",
+      "createdDate": "2025-10-12T08:00:45.000Z",
+      "daysSinceRequested": 999
     }
   ]
 }
