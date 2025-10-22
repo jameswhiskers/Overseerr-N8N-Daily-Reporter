@@ -5,11 +5,82 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -1152,
-        432
+        -1056,
+        352
       ],
       "id": "d552cf88-8e79-4e39-b1b2-01271ce47851",
       "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d0e6bf84-cede-4aa5-a6ea-24b0b4736196",
+              "name": "endpoint",
+              "value": "https://example.com",
+              "type": "string"
+            },
+            {
+              "id": "0a1f27fd-91ba-4417-a0c8-371b52b4c11c",
+              "name": "key",
+              "value": "supersecrethyperhardtoremmemberapikey",
+              "type": "string"
+            },
+            {
+              "id": "c404ccfa-fff2-41b5-8ca0-8406322ec32e",
+              "name": "lessDetail",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "bae98e78-58b8-40f6-842f-9df685eb922c",
+              "name": "warnAfter",
+              "value": 60,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -640,
+        352
+      ],
+      "id": "b1330458-092a-476f-9510-ddf962702dbf",
+      "name": "settings"
+    },
+    {
+      "parameters": {
+        "content": "## Settings\n\nendpoint - your overseer url\nkey - overseer api key\nlessDetail - less or more details (look to right for an explanation)\nwarnAfter - how many days in limbo do you want your downloads to be in before you get a warning? ",
+        "height": 528,
+        "width": 336
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -768,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "c1f7891e-ec01-4fda-bf1d-6fddc6d12e46",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Set your trigger!\nI dont know, maybe like a daily cron job or something?! You decide.",
+        "height": 528,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1168,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "6a4385e0-5258-45c9-a33f-6579967b7c7d",
+      "name": "Sticky Note3"
     },
     {
       "parameters": {
@@ -24,26 +95,26 @@
           ]
         }
       },
-      "id": "fb076bed-dab0-4336-9291-521a5970e970",
+      "id": "956c73e9-9cc6-49a6-ad58-fbc7336f2783",
       "name": "Get Overseerr Requests",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -192,
-        496
+        -176,
+        416
       ]
     },
     {
       "parameters": {
         "functionCode": "\nconst data = $json.results || [];\n\nconst pending = data.filter(r => r.status === 1);\nconst approved = data.filter(r => r.status === 2);\nconst available = data.filter(r => r.status === 3);\nconst stalled = data.filter(r => r.status === 2 && r.media?.status !== 5);\n\nreturn [{\n  json: {\n    date: new Date().toISOString().split('T')[0],\n    pending_count: pending.length,\n    approved_count: approved.length,\n    available_count: available.length,\n    stalled_count: stalled.length,\n    stalled_items: stalled.map(r => ({\n      title: r.media?.mediaInfo?.title || r.media?.title || 'Unknown',\n      movieId: r.id,\n      tmdbId: r.media.tmdbId,\n      mediaType: r.media?.mediaType || 'unknown',\n      status: 'approved',\n      downloadStatus: r.media?.status,\n      requestedBy: r.requestedBy.plexUsername,\n      createdDate: r.createdAt\n    }))\n  }\n}];\n"
       },
-      "id": "40415ed9-c3cb-4d2d-b07f-b2d88e7e821e",
+      "id": "456ebade-b2d9-476a-89bf-26ba59b995ab",
       "name": "Process Overseerr Data",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [
-        -16,
-        496
+        0,
+        416
       ]
     },
     {
@@ -54,10 +125,10 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        160,
-        496
+        176,
+        416
       ],
-      "id": "126b5fd7-bb3e-4ad5-a59f-91a47f9b2a53",
+      "id": "a6e04fca-64af-4938-b961-3e0d0770d83a",
       "name": "Split Out"
     },
     {
@@ -70,47 +141,32 @@
       "typeVersion": 3,
       "position": [
         368,
-        416
+        336
       ],
-      "id": "d720f6ba-cdb6-4534-b061-9a50204245c1",
+      "id": "70cae0c8-7196-4292-95ae-821cce366b5e",
       "name": "Loop Over Items"
     },
     {
       "parameters": {
-        "url": "={{ $('settings').item.json.endpoint }}/api/v1/{{ $json.detailsEndpoint }}",
+        "url": "={{ $('settings1').item.json.endpoint }}/api/v1/{{ $json.detailsEndpoint }}",
         "options": {},
         "headerParametersUi": {
           "parameter": [
             {
               "name": "X-Api-Key",
-              "value": "={{ $('settings').item.json.key }}"
+              "value": "={{ $('settings1').item.json.key }}"
             }
           ]
         }
       },
-      "id": "154d547b-83da-40c6-bda6-34edd0f6e85a",
+      "id": "faa08efa-7651-4077-8015-d0281c59ad09",
       "name": "Get Overseerr Requests1",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        816,
-        672
+        560,
+        640
       ]
-    },
-    {
-      "parameters": {
-        "aggregate": "aggregateAllItemData",
-        "destinationFieldName": "output",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
-      "position": [
-        1344,
-        336
-      ],
-      "id": "1786b62e-cd12-48c1-8a70-897f7cf50423",
-      "name": "Aggregate"
     },
     {
       "parameters": {
@@ -133,6 +189,12 @@
               "name": "createdDate",
               "value": "={{ $json.createdDate }}",
               "type": "string"
+            },
+            {
+              "id": "16950b70-01e7-4533-9851-0de7fafbd03a",
+              "name": "daysSinceRequested",
+              "value": "={{ $json.daysSinceRequested }}",
+              "type": "number"
             }
           ]
         },
@@ -141,10 +203,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        800,
-        224
+        752,
+        176
       ],
-      "id": "4872f168-e3de-46b2-a490-c194d2254459",
+      "id": "eb865ad1-1975-4d1f-8fa2-02f26da113dc",
       "name": "lessDetails"
     },
     {
@@ -160,13 +222,13 @@
           ]
         }
       },
-      "id": "4e4b86d5-27aa-42c1-accc-132b381074a6",
+      "id": "137b5335-704b-4715-8b2d-267322ee5f3d",
       "name": "Get Overseerr Requests2",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -192,
-        336
+        -176,
+        256
       ]
     },
     {
@@ -177,10 +239,10 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        160,
-        336
+        176,
+        256
       ],
-      "id": "01eae456-317c-4da9-9c3a-35d063200995",
+      "id": "2d494a10-a4d5-4d58-96bd-3c77c1e49a0c",
       "name": "Split Out1"
     },
     {
@@ -244,152 +306,11 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        -416,
-        432
+        -400,
+        352
       ],
-      "id": "9175f3eb-e0c5-4d36-8251-65398697a441",
+      "id": "e10d871f-5402-4602-8cfe-393c6743163e",
       "name": "Switch"
-    },
-    {
-      "parameters": {
-        "rules": {
-          "values": [
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $('settings').item.json.lessDetail }}",
-                    "rightValue": "",
-                    "operator": {
-                      "type": "boolean",
-                      "operation": "true",
-                      "singleValue": true
-                    },
-                    "id": "3335f8d6-1949-4e3f-a090-33a62374ddf7"
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "less"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "0ce259da-7716-44cf-b71b-e5cf58d66947",
-                    "leftValue": "={{ $('settings').item.json.lessDetail }}",
-                    "rightValue": "",
-                    "operator": {
-                      "type": "boolean",
-                      "operation": "false",
-                      "singleValue": true
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "more"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3.3,
-      "position": [
-        624,
-        336
-      ],
-      "id": "c6668e97-b443-413b-ba62-af7a986a9bfc",
-      "name": "Switch1"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "d0e6bf84-cede-4aa5-a6ea-24b0b4736196",
-              "name": "endpoint",
-              "value": "https://example.com",
-              "type": "string"
-            },
-            {
-              "id": "0a1f27fd-91ba-4417-a0c8-371b52b4c11c",
-              "name": "key",
-              "value": "supersecrethyperhardtoremmemberapikey",
-              "type": "string"
-            },
-            {
-              "id": "c404ccfa-fff2-41b5-8ca0-8406322ec32e",
-              "name": "lessDetail",
-              "value": true,
-              "type": "boolean"
-            },
-            {
-              "id": "bae98e78-58b8-40f6-842f-9df685eb922c",
-              "name": "warnAfter",
-              "value": 60,
-              "type": "number"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -688,
-        432
-      ],
-      "id": "b1330458-092a-476f-9510-ddf962702dbf",
-      "name": "settings"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "b1877c1e-7aa3-4c2b-a384-834889fecb55",
-              "leftValue": "={{ $json.daysSinceRequested }}",
-              "rightValue": "={{ $('settings').item.json.warnAfter }}",
-              "operator": {
-                "type": "number",
-                "operation": "gte"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1184,
-        336
-      ],
-      "id": "bbe28572-196c-4f55-aaf6-93afbe092204",
-      "name": "IfOverXDays"
     },
     {
       "parameters": {
@@ -408,10 +329,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -16,
-        336
+        0,
+        256
       ],
-      "id": "d7c7666f-15ef-46fd-aaa3-d169401b7799",
+      "id": "e985ff91-f0ba-4b4d-b140-3db625a6b084",
       "name": "lilCleanUp"
     },
     {
@@ -479,10 +400,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        976,
-        672
+        704,
+        640
       ],
-      "id": "62e786a5-db11-4c8c-bdae-0da9d926c30e",
+      "id": "2f202700-f855-46ea-9fd4-aa80c3b6bf2d",
       "name": "terribleMerge"
     },
     {
@@ -492,54 +413,41 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1136,
-        672
+        848,
+        640
       ],
-      "id": "f4ba09ab-92fc-4f3c-b14b-91006010c40c",
+      "id": "0c9a5278-49bf-4f2c-8392-e9f7b4f04093",
       "name": "GoodThingsComeToThoseWhoWait",
       "webhookId": "75d0a1b3-a42c-4eda-ac4f-6e90d21cf5db"
     },
     {
       "parameters": {
-        "jsCode": "const currentDate = new Date();\nconst MS_PER_DAY = 1000 * 60 * 60 * 24;\n\n// Use 'items.map' for concise transformation in n8n's Code node\nreturn items.map(item => {\n    // 1. Get the created date from the current item\n    const createdDateStr = item.json.createdDate;\n    \n    // Check if the createdDate exists and is a string\n    if (createdDateStr) {\n        // 2. Convert the ISO string to a Date object\n        const createdDate = new Date(createdDateStr);\n        \n        // 3. Calculate the difference in milliseconds\n        // The subtraction of two Date objects yields the difference in milliseconds\n        const timeDifferenceMs = currentDate.getTime() - createdDate.getTime();\n        \n        // 4. Convert milliseconds to days and round down to the nearest whole number\n        const daysSinceCreation = Math.floor(timeDifferenceMs / MS_PER_DAY);\n        \n        // 5. Add the new field to the item's JSON data\n        item.json.daysSinceRequested = daysSinceCreation;\n    } else {\n        // Handle cases where createdDate might be missing or invalid\n        item.json.daysSinceRequested = null; \n    }\n    \n    // Return the modified item\n    return item;\n});"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        960,
-        336
-      ],
-      "id": "b0893e6d-95b9-4041-a980-dfafebb5076f",
-      "name": "CalculateDaysSince"
-    },
-    {
-      "parameters": {
-        "content": "## Details Loop!\n\n- Repeatedly poke your Overseer to get human readable details poke poke poke\n- Maybe.... split this into batches if you have a lot waiting...",
-        "height": 288,
-        "width": 912
+        "content": "## Details Loop!\n\n- Repeatedly poke your Overseer to get human readable details poke poke poke\n- Maybe.... split this into batches if you have a lot waiting...\n- Checks if they exceed warn after",
+        "height": 416,
+        "width": 816
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         352,
-        544
+        464
       ],
       "typeVersion": 1,
-      "id": "4934ff14-22be-4c1e-bb22-bc5af52b5c3a",
+      "id": "18310360-f1d1-4415-8f06-36e0dad275e2",
       "name": "Sticky Note"
     },
     {
       "parameters": {
         "content": "## Overseer API\n- Less uses the /media api call, showing shows that have been requested but still \"processing\". So havent been downloaded\n\n- More uses /request api call and some filtering of the status to include tv shows that are only \"partially\" available, or missing seasons.",
-        "height": 640,
-        "width": 704
+        "height": 528,
+        "width": 752
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -432,
-        16
+        -416,
+        48
       ],
       "typeVersion": 1,
-      "id": "68097eab-e861-430f-a86e-1194d0ab9f39",
+      "id": "79689c7e-69cc-42d1-a56d-146bc4016fa8",
       "name": "Sticky Note1"
     },
     {
@@ -549,81 +457,164 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        672,
-        672
+        416,
+        640
       ],
-      "id": "e98be86c-3d3d-4e04-8b46-5ff523d11934",
+      "id": "ab78f82f-e2dd-4f69-94a2-10e839f94f21",
       "name": "movieOrTv"
-    },
-    {
-      "parameters": {
-        "content": "## Settings\n\nendpoint - your overseer url\nkey - overseer api key\nlessDetail - less or more details (look to right for an explanation)\nwarnAfter - how many days in limbo do you want your downloads to be in before you get a warning? ",
-        "height": 512,
-        "width": 336
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -784,
-        64
-      ],
-      "typeVersion": 1,
-      "id": "c1f7891e-ec01-4fda-bf1d-6fddc6d12e46",
-      "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "content": "## Set your trigger!\nI dont know, maybe like a daily cron job or something?! You decide.",
-        "height": 352,
-        "width": 384
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -1184,
-        224
-      ],
-      "typeVersion": 1,
-      "id": "6a4385e0-5258-45c9-a33f-6579967b7c7d",
-      "name": "Sticky Note3"
-    },
-    {
-      "parameters": {
-        "content": "## Ignore the fresh ones\n- Ignore anything under your warnAfter date\n- aggregates so you dont get spammed, be nice to yourself\n",
-        "height": 400,
-        "width": 352
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        1136,
-        80
-      ],
-      "typeVersion": 1,
-      "id": "5ffd6727-a9b7-4f26-9b3f-e49fe36cf07f",
-      "name": "Sticky Note4"
     },
     {
       "parameters": {
         "content": "## ExitPoint\n\n- maybe an email? or telegram... can n8n automate carrier pigeons yet?",
         "height": 400,
-        "width": 400
+        "width": 176
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1520,
-        80
+        992,
+        48
       ],
       "typeVersion": 1,
-      "id": "81b44895-7db8-4faa-aedb-910fb4fcf5cc",
+      "id": "bf0d164c-dd2f-4f70-82e4-ceea88931478",
       "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('settings1').item.json.lessDetail }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "3335f8d6-1949-4e3f-a090-33a62374ddf7"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "less"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0ce259da-7716-44cf-b71b-e5cf58d66947",
+                    "leftValue": "={{ $('settings1').item.json.lessDetail }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "more"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        640,
+        288
+      ],
+      "id": "ed3d5c63-111a-49cb-ab5f-bf7e29126ce0",
+      "name": "detailLevel"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b1877c1e-7aa3-4c2b-a384-834889fecb55",
+              "leftValue": "={{ $json.daysSinceRequested }}",
+              "rightValue": "={{ $('settings1').item.json.warnAfter }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        288
+      ],
+      "id": "a77c24b1-ac96-4142-8c55-2fcf4cdcbe17",
+      "name": "IfOverXDays2"
+    },
+    {
+      "parameters": {
+        "content": "## If Over Date\n - Ignore the fresh items, and aggregate's evreything to pass on",
+        "height": 400,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        496,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "d5752cdf-4996-4984-b3c7-f584ed7e3b6c",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const currentDate = new Date();\nconst MS_PER_DAY = 1000 * 60 * 60 * 24;\n\n// Use 'items.map' for concise transformation in n8n's Code node\nreturn items.map(item => {\n    // 1. Get the created date from the current item\n    const createdDateStr = item.json.createdDate;\n    \n    // Check if the createdDate exists and is a string\n    if (createdDateStr) {\n        // 2. Convert the ISO string to a Date object\n        const createdDate = new Date(createdDateStr);\n        \n        // 3. Calculate the difference in milliseconds\n        // The subtraction of two Date objects yields the difference in milliseconds\n        const timeDifferenceMs = currentDate.getTime() - createdDate.getTime();\n        \n        // 4. Convert milliseconds to days and round down to the nearest whole number\n        const daysSinceCreation = Math.floor(timeDifferenceMs / MS_PER_DAY);\n        \n        // 5. Add the new field to the item's JSON data\n        item.json.daysSinceRequested = daysSinceCreation;\n    } else {\n        // Handle cases where createdDate might be missing or invalid\n        item.json.daysSinceRequested = null; \n    }\n    \n    // Return the modified item\n    return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        640
+      ],
+      "id": "9d7223b8-ac92-41dc-9195-fd8e47e675f0",
+      "name": "calculateDaysSinceRequested"
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
             {
-              "id": "5783b963-b897-48ed-8ccc-6c0a9e8d155b",
+              "id": "172025b1-0164-4c40-b082-9e25a46cbee4",
               "name": "output",
               "value": "={{ $json.output }}",
-              "type": "array"
+              "type": "object"
             }
           ]
         },
@@ -632,11 +623,24 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1632,
+        1024,
         288
       ],
-      "id": "e3761a71-1d76-4331-a2e1-bd69a24fd37b",
-      "name": "SendIT"
+      "id": "f7b88724-51e0-4e85-83af-c3e3fff26475",
+      "name": "REPLACEME!"
+    },
+    {
+      "parameters": {
+        "jsCode": "// assume input: an array of items (old scheme) at `items`\nconst stalledItems = items.map(item => item.json || item); // just in case it's wrapped\n\n// Get the length of the array\nconst count = stalledItems.length;\n// Build the new output object\nreturn [\n  {\n    json: {\n      output: {\n        date: new Date().toISOString().split('T')[0],\n        stalled_count: count,\n        stalled_over_date: stalledItems\n      }\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        288
+      ],
+      "id": "d8f3a817-dabe-4f88-8e26-e09d974f2cf1",
+      "name": "cleanUp"
     }
   ],
   "connections": {
@@ -645,6 +649,17 @@
         [
           {
             "node": "settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "settings": {
+      "main": [
+        [
+          {
+            "node": "Switch",
             "type": "main",
             "index": 0
           }
@@ -688,7 +703,7 @@
       "main": [
         [
           {
-            "node": "Switch1",
+            "node": "IfOverXDays2",
             "type": "main",
             "index": 0
           }
@@ -713,22 +728,11 @@
         ]
       ]
     },
-    "Aggregate": {
-      "main": [
-        [
-          {
-            "node": "SendIT",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "lessDetails": {
       "main": [
         [
           {
-            "node": "CalculateDaysSince",
+            "node": "cleanUp",
             "type": "main",
             "index": 0
           }
@@ -775,46 +779,6 @@
         ]
       ]
     },
-    "Switch1": {
-      "main": [
-        [
-          {
-            "node": "lessDetails",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "CalculateDaysSince",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "settings": {
-      "main": [
-        [
-          {
-            "node": "Switch",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "IfOverXDays": {
-      "main": [
-        [
-          {
-            "node": "Aggregate",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "lilCleanUp": {
       "main": [
         [
@@ -841,18 +805,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "CalculateDaysSince": {
-      "main": [
-        [
-          {
-            "node": "IfOverXDays",
+            "node": "calculateDaysSinceRequested",
             "type": "main",
             "index": 0
           }
@@ -864,6 +817,57 @@
         [
           {
             "node": "Get Overseerr Requests1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "detailLevel": {
+      "main": [
+        [
+          {
+            "node": "lessDetails",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "cleanUp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IfOverXDays2": {
+      "main": [
+        [
+          {
+            "node": "detailLevel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calculateDaysSinceRequested": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cleanUp": {
+      "main": [
+        [
+          {
+            "node": "REPLACEME!",
             "type": "main",
             "index": 0
           }
