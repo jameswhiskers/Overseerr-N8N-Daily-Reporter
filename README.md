@@ -66,50 +66,60 @@ Edit the **`settings`** node to tell it how to behave:
 -Less mode
 ```json
 
+
 {
-  "output": [
+"output": {
+  "date": "2025-10-22",
+  "stalled_count":2,
+  "stalled_over_date": [
     {
-      "originalTitle": "Looney Tunes Golden Collection, Vol. 1",  
+      "originalTitle": "Needful Things",
       "mediaType": "movie",
-      "createdDate": "2025-10-21T03:49:10.000Z",
-      "daysSinceRequested": 0
+      "createdDate": "2025-08-16T02:41:16.000Z",
+      "daysSinceRequested": 66
     },
     {
-    "originalTitle": "The Toxic Avenger Unrated",
-    "mediaType": "movie",
-    "createdDate":"2025-10-12T07:42:54.000Z",
-    "daysSinceRequested": 9
+      "originalTitle": "Would You Rather",
+      "mediaType": "movie",
+      "createdDate": "2025-08-16T02:40:43.000Z",
+      "daysSinceRequested": 66
     }
   ]
+  }
 }
 ```
 
 - More Mode
 ```json
 
+
 {
-  "output": [
-    {
-      "movieId": 38,
-      "tmdbId": 465022,
-      "mediaType": "movie",
-      "status": "approved",
-      "downloadStatus": 3,
-      "requestedBy": "Grimm",
-      "originalTitle": "Looney Tunes Golden Collection, Vol. 1",
-      "createdDate": "2025-10-21T03:49:10.000Z",
-      "daysSinceRequested": 0
-    },
+"output": {
+  "date": "2025-10-22",
+  "stalled_count": 2,
+  "stalled_over_date": [
     {
       "movieId": 33,
       "tmdbId": 1428,
       "mediaType": "tv",
       "status": "approved",
       "downloadStatus": 4,
-      "requestedBy": "thatautisticguy",
-      "originalTitle":"MythBusters",
+      "requestedBy": "ThatAutisticGuy",
+      "originalTitle": "MythBusters",
       "createdDate": "2025-10-12T08:00:45.000Z",
-      "daysSinceRequested": 999
+      "daysSinceRequested": 9
+    },
+    {
+      "movieId": 7,
+      "tmdbId": 97051,
+      "mediaType": "movie",
+      "status": "approved",
+      "downloadStatus": 3,
+      "requestedBy": null,
+      "originalTitle": "Would You Rather",
+      "createdDate": "2025-08-16T02:40:43.000Z",
+      "daysSinceRequested": 66
     }
-  ]
+    ]
+  }
 }
