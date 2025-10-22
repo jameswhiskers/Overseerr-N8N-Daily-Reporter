@@ -29,23 +29,6 @@ Edit the **`settings`** node to tell it how to behave:
 
 ---
 
-## 🧩 Key Nodes
-
-| Node | Purpose |
-|------|----------|
-| **settings** | Config storage — your one-stop tweak shop |
-| **Switch / Switch1** | Chooses “less” or “more” detail paths |
-| **Process Overseerr Data** | Turns the Overseerr JSON mess into something sane |
-| **Loop Over Items** | Goes full Groundhog Day through your stalled media |
-| **movieOrTv** | Decides which API endpoint to hit |
-| **GoodThingsComeToThoseWhoWait** | Rate-limits the Overseerr poking (because kindness is a virtue) |
-| **CalculateDaysSince** | Figures out how long ago each request was made |
-| **IfOverXDays** | Filters out the fresh ones so you don’t get spammed |
-| **Aggregate / SendIT** | Smashes everything together into one neat JSON blob for your next workflow |
-| **Grimm (optional)** | Your sarcastic narrator AI, who yells when you break things |
-
----
-
 ## 🧰 Setup / Requirements
 
 - Copy pasta into a **fresh n8n workflow** (you have that right?),  
