@@ -91,8 +91,6 @@ Edit the **`settings`** node to tell it how to behave:
 
 - More Mode
 ```json
-
-
 {
 "output": {
   "date": "2025-10-22",
